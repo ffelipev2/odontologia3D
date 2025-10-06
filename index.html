@@ -164,7 +164,7 @@
       objLoader.load('./modelos/Yorik_Jaw.obj', obj => {
         obj.traverse(n => { if (n.isMesh) { n.material = boneMaterial.clone(); n.castShadow = true; n.receiveShadow = true; } });
         currentObject = obj; scene.add(obj);
-        fitCameraToObject(obj, 1.8);
+        fitCameraToObject(obj, 6.0);
       }, undefined, err => { console.error(err); progress.textContent = 'Error cargando Yorik_Jaw.obj'; });
     }
 
