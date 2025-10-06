@@ -7,21 +7,51 @@
   <link rel="icon" href="data:," />
   <style>
     html, body { height: 100%; margin: 0; }
-    body { background: #0b1020; color: #fff; font-family: system-ui, sans-serif; }
+    body { background: #0b1020; color: #fff; font-family: system-ui, sans-serif; overflow: hidden; }
     header { text-align: center; padding: 10px 0; background: #111830; font-size: 20px; font-weight: 600; letter-spacing: 0.5px; color: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,.4); position: fixed; top: 0; left: 0; width: 100%; z-index: 5; }
     #progress { position: fixed; left: 50%; top: 70px; transform: translateX(-50%); background: rgba(0,0,0,.4); padding: 8px 12px; border-radius: 999px; font-size: 14px; backdrop-filter: blur(6px); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
     #credit { position: fixed; right: 14px; bottom: 12px; opacity: .7; font-size: 12px; }
     canvas { display: block; width: 100vw; height: 100vh; }
-    #ui { position: fixed; left: 12px; top: 80px; z-index: 2; }
-    .menu { background: rgba(0,0,0,.55); padding: 12px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,.35); backdrop-filter: blur(6px);}
+
+    /* Menú flotante responsive */
+    #menuToggle {
+      position: fixed;
+      top: 80px;
+      left: 12px;
+      background: rgba(0,0,0,0.7);
+      border: none;
+      color: #fff;
+      font-size: 22px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    #ui {
+      position: fixed;
+      left: 12px;
+      top: 130px;
+      z-index: 9;
+      display: none;
+    }
+
+    .menu { background: rgba(0,0,0,.85); padding: 12px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,.35); backdrop-filter: blur(6px); width: 220px; }
     .menu h1 { margin: 0 0 8px; font-size: 16px; font-weight: 600; opacity: .9; }
-    .menu button { display: block; width: 200px; margin: 6px 0; padding: 10px 12px; border: 0; border-radius: 12px; font-weight: 600; cursor: pointer; background: #ffffff; color:#111; }
+    .menu button { display: block; width: 100%; margin: 6px 0; padding: 10px 12px; border: 0; border-radius: 12px; font-weight: 600; cursor: pointer; background: #ffffff; color:#111; }
     .menu button.secondary { background: #e5e7eb; }
     .menu hr{border:0;border-top:1px solid rgba(255,255,255,.15);margin:8px 0}
+
+    @media (min-width: 768px) {
+      #menuToggle { display: none; }
+      #ui { display: block !important; }
+    }
   </style>
 </head>
 <body>
   <header>Universidad San Sebastián</header>
+
+  <button id="menuToggle">☰</button>
 
   <div id="ui">
     <div class="menu">
@@ -134,7 +164,7 @@
       objLoader.load('./modelos/Yorik_Jaw.obj', obj => {
         obj.traverse(n => { if (n.isMesh) { n.material = boneMaterial.clone(); n.castShadow = true; n.receiveShadow = true; } });
         currentObject = obj; scene.add(obj);
-        fitCameraToObject(obj, 6.0);
+        fitCameraToObject(obj, 1.8);
       }, undefined, err => { console.error(err); progress.textContent = 'Error cargando Yorik_Jaw.obj'; });
     }
 
@@ -144,6 +174,13 @@
 
     // Mostrar mandíbula primero
     loadJaw();
+
+    // Toggle del menú móvil
+    const menuToggle = document.getElementById('menuToggle');
+    const ui = document.getElementById('ui');
+    menuToggle.addEventListener('click', () => {
+      ui.style.display = ui.style.display === 'block' ? 'none' : 'block';
+    });
 
     window.addEventListener('resize', () => {
       const w = innerWidth, h = innerHeight;
