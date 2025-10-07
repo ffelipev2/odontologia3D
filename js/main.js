@@ -23,7 +23,6 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.06;
 controls.enablePan = true;
 
-// 🔹 Variables globales de vista inicial
 let initialCameraPos = new THREE.Vector3();
 let initialTargetPos = new THREE.Vector3();
 
@@ -46,21 +45,12 @@ const { objLoader, mtlLoader } = setupLoaders(
   () => document.getElementById('progress').style.display = 'none'
 );
 
-// 🔹 Función extendida que guarda la vista inicial tras cargar
 function loadAndSave(type) {
   loadModel(type, scene, camera, controls, { objLoader, mtlLoader });
-  setTimeout(saveInitialView, 800); // pequeño delay para asegurar carga completa
+  updateModelInfo(type);
+  setTimeout(saveInitialView, 800);
 }
 
-setupUI({
-  loadModel: (type) => loadAndSave(type),
-  resetCamera
-});
-
-// 🔹 Cargar modelo inicial (mandíbula)
-loadAndSave('jaw');
-
-// 🔹 Actualizar coordenadas en pantalla
 function updateCoords() {
   const obj = window.currentObject;
   if (!obj) return;
@@ -80,10 +70,52 @@ function updateCoords() {
   document.getElementById('tarY').textContent = ctrl.target.y.toFixed(2);
   document.getElementById('tarZ').textContent = ctrl.target.z.toFixed(2);
 }
-
 setInterval(updateCoords, 200);
 
-// 🔹 Render loop y resize
+// === PANEL DE INFORMACIÓN ===
+const infoPanel = document.getElementById('infoPanel');
+const btnInfo = document.getElementById('btn-info');
+const closeInfo = document.getElementById('closeInfo');
+const modelTitle = document.getElementById('modelTitle');
+const modelDescription = document.getElementById('modelDescription');
+
+btnInfo.addEventListener('click', () => infoPanel.classList.add('visible'));
+closeInfo.addEventListener('click', () => infoPanel.classList.remove('visible'));
+
+export function updateModelInfo(type) {
+  if (type === 'jaw') {
+    modelTitle.textContent = "Mandíbula Humana (OBJ)";
+    modelDescription.textContent = "Representación tridimensional de la mandíbula humana, utilizada en prácticas de odontología y anatomía facial.";
+  } else if (type === 'skull') {
+    modelTitle.textContent = "Cráneo Humano (OBJ)";
+    modelDescription.textContent = "Modelo anatómico del cráneo humano, empleado para estudios craneofaciales y estructuras óseas del rostro.";
+  }
+}
+
+// === MENÚ RESPONSIVE ===
+const sidebar = document.getElementById('sidebar');
+const menuToggle = document.getElementById('menuToggle');
+
+menuToggle.addEventListener('click', () => {
+  sidebar.classList.toggle('visible');
+});
+
+['btn-skull', 'btn-jaw', 'btn-reset', 'btn-toggle-coords', 'btn-info'].forEach(id => {
+  const btn = document.getElementById(id);
+  btn.addEventListener('click', () => {
+    if (window.innerWidth <= 900) {
+      sidebar.classList.remove('visible');
+    }
+  });
+});
+
+setupUI({
+  loadModel: (type) => loadAndSave(type),
+  resetCamera
+});
+
+loadAndSave('jaw');
+
 window.addEventListener('resize', () => {
   const w = innerWidth, h = innerHeight;
   renderer.setSize(w, h);
