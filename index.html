@@ -25,7 +25,7 @@
     <div class="navbar-right">
       <button id="menuToggle" class="mobile-menu">☰</button>
       <div class="user-info">
-        <span>Laboratorio Virtual </span>
+        <span>Laboratorio de Odontología</span>
       </div>
     </div>
   </nav>
@@ -34,19 +34,18 @@
   <aside id="sidebar" class="sidebar">
     <div class="menu">
       <h1>Modelos 3D</h1>
-      <button id="btn-skull">Cráneo</button>
-      <button id="btn-jaw">Mandíbula</button>
+      <button id="btn-skull">Cráneo (OBJ)</button>
+      <button id="btn-jaw">Mandíbula (OBJ)</button>
       <hr/>
       <button id="btn-reset" class="secondary">Recentrar vista</button>
       <button id="btn-info" class="secondary">Mostrar información</button>
       <hr/>
-      <button id="btn-toggle-coords" class="secondary">Ver coordenadas</button>
+      <!--<button id="btn-toggle-coords" class="secondary">Ver coordenadas</button> -->
     </div>
   </aside>
 
   <!-- 🎯 CONTENIDO PRINCIPAL -->
   <main class="main-content">
-    <div id="progress">Cargando… <span id="pct">0%</span><div id="progress-bar"></div></div>
     <canvas id="c"></canvas>
     <div id="credit">Arrastra para rotar · Pincha para zoom · Dos dedos para mover</div>
   </main>
@@ -70,6 +69,17 @@
     <b>Cámara</b><br>
     camX: <span id="camX">0</span> | camY: <span id="camY">0</span> | camZ: <span id="camZ">0</span><br>
     targetX: <span id="tarX">0</span> | targetY: <span id="tarY">0</span> | targetZ: <span id="tarZ">0</span>
+  </div>
+
+  <!-- 🌟 NUEVA PANTALLA DE CARGA -->
+  <div id="loadingOverlay">
+    <div class="loader-box">
+      <div id="loader-title" class="loader-title">Cargando modelo 3D...</div>
+      <div class="loader-bar">
+        <div id="loader-progress"></div>
+      </div>
+      <div id="loader-percent">0%</div>
+    </div>
   </div>
 
   <script type="module" src="js/main.js"></script>

@@ -130,29 +130,6 @@ canvas {
   font-size: 12px;
 }
 
-/* --- PROGRESS BAR --- */
-#progress {
-  position: absolute;
-  left: 50%;
-  top: 50px;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.6);
-  padding: 8px 12px;
-  border-radius: 12px;
-  font-size: 14px;
-  text-align: center;
-  width: 200px;
-}
-
-#progress-bar {
-  height: 4px;
-  background: #00bcd4;
-  width: 0%;
-  border-radius: 2px;
-  margin-top: 4px;
-  transition: width 0.2s ease;
-}
-
 /* --- PANEL DE COORDENADAS --- */
 #coordsPanel {
   position: fixed;
@@ -219,6 +196,63 @@ canvas {
   font-size: 14px;
   line-height: 1.4;
   color: #ddd;
+}
+
+/* --- PANTALLA DE CARGA --- */
+#loadingOverlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle at center, rgba(10,15,30,0.95), rgba(0,0,0,0.95));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+#loadingOverlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader-box {
+  text-align: center;
+  width: 280px;
+}
+
+.loader-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #ddd;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+.loader-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+#loader-progress {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00bcd4, #4dd0e1);
+  transition: width 0.2s ease;
+  border-radius: 4px;
+}
+
+#loader-percent {
+  font-size: 14px;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 /* --- RESPONSIVE --- */
