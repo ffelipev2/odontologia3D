@@ -84,10 +84,10 @@ closeInfo.addEventListener('click', () => infoPanel.classList.remove('visible'))
 
 export function updateModelInfo(type) {
   if (type === 'jaw') {
-    modelTitle.textContent = "Mandíbula Humana (OBJ)";
+    modelTitle.textContent = "Mandíbula Humana";
     modelDescription.textContent = "Representación tridimensional de la mandíbula humana, utilizada en prácticas de odontología y anatomía facial.";
   } else if (type === 'skull') {
-    modelTitle.textContent = "Cráneo Humano (OBJ)";
+    modelTitle.textContent = "Cráneo Humano";
     modelDescription.textContent = "Modelo anatómico del cráneo humano, empleado para estudios craneofaciales y estructuras óseas del rostro.";
   }
 }
