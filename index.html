@@ -1,250 +1,63 @@
 <!doctype html>
 <html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Universidad San Sebastián - Visor 3D</title>
-  <link rel="icon" href="data:," />
-  <style>
-    html, body { height: 100%; margin: 0; }
-    body { background: #0b1020; color: #fff; font-family: system-ui, sans-serif; overflow: hidden; }
-    header { text-align: center; padding: 10px 0; background: #111830; font-size: 20px; font-weight: 600; color: #ffffff; position: fixed; top: 0; left: 0; width: 100%; z-index: 5; }
-    #progress { position: fixed; left: 50%; top: 70px; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 8px 12px; border-radius: 12px; font-size: 14px; backdrop-filter: blur(6px); width: 200px; text-align: center; }
-    #progress-bar { height: 4px; background: #00bcd4; width: 0%; border-radius: 2px; margin-top: 4px; transition: width 0.2s ease; }
-    #credit { position: fixed; right: 14px; bottom: 12px; opacity: .7; font-size: 12px; }
-    canvas { display: block; width: 100vw; height: 100vh; }
-    #menuToggle { position: fixed; top: 80px; left: 12px; background: rgba(0,0,0,0.7); border: none; color: #fff; font-size: 22px; padding: 10px 14px; border-radius: 10px; cursor: pointer; z-index: 10; }
-    #ui { position: fixed; left: 12px; top: 130px; z-index: 9; display: none; }
-    .menu { background: rgba(0,0,0,.85); padding: 12px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,.35); backdrop-filter: blur(6px); width: 220px; }
-    .menu h1 { margin: 0 0 8px; font-size: 16px; font-weight: 600; opacity: .9; }
-    .menu button { display: block; width: 100%; margin: 6px 0; padding: 10px 12px; border: 0; border-radius: 12px; font-weight: 600; cursor: pointer; background: #ffffff; color:#111; transition: background 0.2s; }
-    .menu button:hover { background: #dbeafe; }
-    .menu button.secondary { background: #e5e7eb; }
-    .menu hr{border:0;border-top:1px solid rgba(255,255,255,.15);margin:8px 0}
-    @media (min-width: 768px) {
-      #menuToggle { display: none; }
-      #ui { display: block !important; }
-    }
-  </style>
-</head>
-<body>
-  <header>Universidad San Sebastián</header>
-  <button id="menuToggle">☰</button>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Visor 3D - Universidad San Sebastián</title>
+        <link rel="stylesheet" href="css/style.css">
+        <script type="importmap">
+            {
+            "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+            }
+        </script>
+    </head>
+    <body>
+        <!-- 🧭 NAVBAR SUPERIOR -->
+        <nav class="navbar">
+            <div class="navbar-left">
+                <img src="img/logo.png" alt="Logo USS" class="navbar-logo"/>
+                <span class="navbar-title">Visor Anatómico 3D</span>
+            </div>
+            <div class="navbar-right">
+                <button id="menuToggle" class="mobile-menu">☰</button>
+                <div class="user-info">
+                    <span>Laboratorio de Odontología</span>
+                </div>
+            </div>
+        </nav>
 
-  <div id="ui">
-    <div class="menu">
-      <h1>Modelos 3D</h1>
-      <button id="btn-skull">Cráneo (OBJ)</button>
-      <button id="btn-jaw">Mandíbula (OBJ)</button>
-      <hr/>
-      <button id="btn-reset" class="secondary">Recentrar vista</button>
-    </div>
-  </div>
+        <!-- 🧱 SIDEBAR -->
+        <aside id="sidebar" class="sidebar">
+            <div class="menu">
+                <h1>Modelos 3D</h1>
+                <button id="btn-skull">Cráneo (OBJ)</button>
+                <button id="btn-jaw">Mandíbula (OBJ)</button>
+                <hr/>
+                <button id="btn-reset" class="secondary">Recentrar vista</button>
+                <button id="btn-toggle-coords" class="secondary">Ver coordenadas</button>
+            </div>
+        </aside>
 
-  <div id="progress">Cargando… <span id="pct">0%</span>
-    <div id="progress-bar"></div>
-  </div>
+        <!-- 🎯 CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+            <div id="progress">Cargando… <span id="pct">0%</span><div id="progress-bar"></div></div>
+            <canvas id="c"></canvas>
+            <div id="credit">Arrastra para rotar · Pincha para zoom · Dos dedos para mover</div>
+        </main>
 
-  <div id="credit">Arrastra para rotar · Pincha para zoom · Dos dedos para mover</div>
-  <canvas id="c"></canvas>
+        <!-- 📊 PANEL DE COORDENADAS -->
+        <div id="coordsPanel">
+            <b>Objeto</b><br>
+            posX: <span id="posX">0</span> | posY: <span id="posY">0</span> | posZ: <span id="posZ">0</span><br>
+            rotX: <span id="rotX">0</span> | rotY: <span id="rotY">0</span> | rotZ: <span id="rotZ">0</span><br><br>
+            <b>Cámara</b><br>
+            camX: <span id="camX">0</span> | camY: <span id="camY">0</span> | camZ: <span id="camZ">0</span><br>
+            targetX: <span id="tarX">0</span> | targetY: <span id="tarY">0</span> | targetZ: <span id="tarZ">0</span>
+        </div>
 
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-      }
-    }
-  </script>
-
-  <script type="module">
-    import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-    import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
-
-    // Variables globales
-    window.currentObject = null;
-    window.camera = null;
-    window.controls = null;
-
-    const canvas = document.getElementById('c');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0b1020);
-
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 1000);
-    window.camera = camera;
-
-    const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6);
-    scene.add(hemi);
-    const dir = new THREE.DirectionalLight(0xffffff, 1.0);
-    dir.position.set(3, 5, 2);
-    scene.add(dir);
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
-    controls.enablePan = true;
-    window.controls = controls;
-
-    const pct = document.getElementById('pct');
-    const progress = document.getElementById('progress');
-    const progressBar = document.getElementById('progress-bar');
-
-    const manager = new THREE.LoadingManager();
-    manager.onStart = () => {
-      pct.textContent = '0%';
-      progress.style.display = 'block';
-      progressBar.style.width = '0%';
-    };
-    manager.onProgress = (_url, loaded, total) => {
-      const percent = Math.round((loaded / total) * 100);
-      pct.textContent = `${percent}%`;
-      progressBar.style.width = `${percent}%`;
-    };
-    manager.onLoad = () => {
-      setTimeout(() => progress.style.display = 'none', 300);
-    };
-
-    const objLoader = new OBJLoader(manager);
-    const mtlLoader = new MTLLoader(manager);
-
-    function clearCurrent() {
-      if (window.currentObject) {
-        window.currentObject.traverse(o => {
-          if (o.isMesh) {
-            o.geometry?.dispose?.();
-            if (Array.isArray(o.material)) o.material.forEach(m => m.dispose());
-            else o.material?.dispose?.();
-          }
-        });
-        scene.remove(window.currentObject);
-        window.currentObject = null;
-      }
-    }
-
-    // Efecto de fade-in
-    function fadeIn(obj) {
-      obj.traverse(child => {
-        if (child.isMesh) {
-          child.material.transparent = true;
-          child.material.opacity = 0;
-        }
-      });
-      let opacity = 0;
-      const fadeInterval = setInterval(() => {
-        opacity += 0.05;
-        obj.traverse(child => {
-          if (child.isMesh) child.material.opacity = Math.min(opacity, 1);
-        });
-        if (opacity >= 1) clearInterval(fadeInterval);
-      }, 30);
-    }
-
-    // Variables para guardar vista inicial
-    let initialCameraPos = new THREE.Vector3();
-    let initialTargetPos = new THREE.Vector3();
-
-    function saveInitialView() {
-      initialCameraPos.copy(camera.position);
-      initialTargetPos.copy(controls.target);
-    }
-
-    // 🔹 Cargar Mandíbula
-    function loadJaw() {
-      clearCurrent();
-      const loader = new OBJLoader(manager);
-      loader.load('./modelos/Yorik_Jaw.obj',
-        obj => {
-          obj.traverse(n => { if (n.isMesh) { n.castShadow = true; n.receiveShadow = true; } });
-          obj.position.set(-5.03, -5.24, -6.83);
-          obj.rotation.set(0.00, 0.00, 0.00);
-          window.currentObject = obj;
-          scene.add(obj);
-          fadeIn(obj);
-
-          camera.position.set(154.66, -38.62, 123.34);
-          controls.target.set(0.00, 0.00, 0.00);
-          controls.update();
-          saveInitialView();
-        },
-        xhr => {
-          const percent = Math.round((xhr.loaded / xhr.total) * 100);
-          pct.textContent = `${percent}%`;
-          progressBar.style.width = `${percent}%`;
-        },
-        err => console.error('Error cargando mandíbula:', err)
-      );
-    }
-
-    // 🔹 Cargar Cráneo
-    function loadSkull() {
-      clearCurrent();
-      mtlLoader.setPath('./modelos/');
-      mtlLoader.load('Skull.mtl', materials => {
-        materials.preload();
-        const loader = new OBJLoader(manager).setMaterials(materials).setPath('./modelos/');
-        loader.load('Skull.obj',
-          obj => {
-            obj.traverse(n => { if (n.isMesh) { n.castShadow = true; n.receiveShadow = true; } });
-            obj.position.set(0.00, 0.76, -13.81);
-            obj.rotation.set(0.00, 0.00, 0.00);
-            window.currentObject = obj;
-            scene.add(obj);
-            fadeIn(obj);
-
-            camera.position.set(1.58, -44.73, 8.13);
-            controls.target.set(1.65, -0.48, -2.64);
-            controls.update();
-            saveInitialView();
-          },
-          xhr => {
-            const percent = Math.round((xhr.loaded / xhr.total) * 100);
-            pct.textContent = `${percent}%`;
-            progressBar.style.width = `${percent}%`;
-          },
-          err => console.error('Error cargando cráneo:', err)
-        );
-      });
-    }
-
-    // Botones
-    document.getElementById('btn-skull').addEventListener('click', loadSkull);
-    document.getElementById('btn-jaw').addEventListener('click', loadJaw);
-    document.getElementById('btn-reset').addEventListener('click', () => {
-      camera.position.copy(initialCameraPos);
-      controls.target.copy(initialTargetPos);
-      controls.update();
-    });
-
-    // Cargar por defecto la mandíbula
-    loadJaw();
-
-    window.addEventListener('resize', () => {
-      const w = innerWidth, h = innerHeight;
-      renderer.setSize(w, h);
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-    });
-
-    (function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    })();
-  </script>
-
-  <!-- 🔹 MENU MÓVIL FUNCIONAL -->
-  <script>
-    const menuToggle = document.getElementById("menuToggle");
-    const ui = document.getElementById("ui");
-    menuToggle.addEventListener("click", () => {
-      ui.style.display = ui.style.display === "block" ? "none" : "block";
-    });
-  </script>
-</body>
+        <script type="module" src="js/main.js"></script>
+    </body>
 </html>

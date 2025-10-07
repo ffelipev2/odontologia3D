@@ -1,0 +1,192 @@
+/* ==========================================================
+   UNIVERSIDAD SAN SEBASTIÁN - VISOR 3D
+   Versión moderna con navbar y sidebar
+   ========================================================== */
+
+/* --- GLOBAL --- */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Inter", system-ui, sans-serif;
+  color: #fff;
+  background: #0b1020;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* --- NAVBAR --- */
+.navbar {
+  height: 60px;
+  background: #111830;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  height: 36px;
+  margin-right: 10px;
+}
+
+.navbar-title {
+  font-weight: 600;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-info {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.mobile-menu {
+  background: transparent;
+  color: #fff;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  display: none;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 250px;
+  height: calc(100% - 60px);
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(6px);
+  padding: 20px;
+  box-shadow: 4px 0 12px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+  z-index: 5;
+}
+
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+/* --- MENÚ INTERNO --- */
+.menu h1 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+  opacity: .9;
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  margin: 6px 0;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #ffffff;
+  color:#111;
+  transition: background 0.2s ease;
+}
+
+.menu button:hover {
+  background: #dbeafe;
+}
+
+.menu button.secondary {
+  background: #e5e7eb;
+}
+
+.menu hr {
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  margin: 10px 0;
+}
+
+/* --- MAIN CONTENT --- */
+.main-content {
+  margin-left: 250px;
+  margin-top: 60px;
+  height: calc(100vh - 60px);
+  position: relative;
+}
+
+#credit {
+  position: fixed;
+  right: 14px;
+  bottom: 12px;
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+/* --- PROGRESS BAR --- */
+#progress {
+  position: absolute;
+  left: 50%;
+  top: 50px;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.6);
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  text-align: center;
+  width: 200px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+#progress-bar {
+  height: 4px;
+  background: #00bcd4;
+  width: 0%;
+  border-radius: 2px;
+  margin-top: 4px;
+  transition: width 0.2s ease;
+}
+
+/* --- PANEL DE COORDENADAS --- */
+#coordsPanel {
+  position: fixed;
+  bottom: 10px;
+  left: 270px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  padding: 10px;
+  font-family: monospace;
+  border-radius: 8px;
+  font-size: 13px;
+  z-index: 1000;
+  display: none;
+  box-shadow: 0 0 8px rgba(0,0,0,0.4);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+  .mobile-menu { display: block; }
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.visible { transform: translateX(0); }
+  .main-content { margin-left: 0; }
+  #coordsPanel { left: 10px; }
+}
