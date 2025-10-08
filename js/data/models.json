@@ -1,26 +1,38 @@
 {
-  "models": [
-    {
-      "id": "jaw",
-      "name": "Mandíbula",
-      "path": "./modelos/Yorik_Jaw.obj",
-      "mtl": null,
-      "position": [-5.03, -5.24, -6.83],
-      "rotation": [0, 0, 0],
-      "camera": [154.66, -38.62, 123.34],
-      "target": [0, 0, 0],
-      "description": "Representación tridimensional de la mandíbula humana, utilizada en prácticas de odontología y anatomía facial."
-    },
-    {
-      "id": "skull",
-      "name": "Cráneo",
-      "path": "./modelos/Skull.obj",
-      "mtl": "./modelos/Skull.mtl",
-      "position": [0, 0.76, -13.81],
-      "rotation": [0, 0, 0],
-      "camera": [1.58, -44.73, 8.13],
-      "target": [1.65, -0.48, -2.64],
-      "description": "Modelo anatómico del cráneo humano, empleado para estudios craneofaciales y estructuras óseas del rostro."
-    }
-  ]
+    "models": [
+        {
+            "id": "jaw",
+            "name": "Mandíbula",
+            "path": "./modelos/Yorik_Jaw.obj",
+            "mtl": null,
+            "position": [-5.03, -5.24, -6.83],
+            "rotation": [0, 0, 0],
+            "camera": [154.66, -38.62, 123.34],
+            "target": [0, 0, 0],
+            "description": "Representación tridimensional de la mandíbula humana, utilizada en prácticas de odontología y anatomía facial."
+        },
+        {
+            "id": "skull",
+            "name": "Cráneo",
+            "path": "./modelos/Skull.obj",
+            "mtl": "./modelos/Skull.mtl",
+            "position": [0, 0.76, -13.81],
+            "rotation": [0, 0, 0],
+            "camera": [1.58, -44.73, 8.13],
+            "target": [1.65, -0.48, -2.64],
+            "description": "Modelo anatómico del cráneo humano, empleado para estudios craneofaciales y estructuras óseas del rostro."
+        },
+
+        {
+            "id": "human",
+            "name": "Humano",
+            "path": "./modelos/human.obj",
+            "mtl": null,
+            "position": [0, -9.50, 0],
+            "rotation": [0, 0, 0],
+            "camera": [21.4, 7.68, 22.76],
+            "target": [0, 0, 0],
+            "description": "Modelo anatómico del ccuerpo humano humano, empleado para estudios craneofaciales y estructuras óseas del rostro."
+        }
+    ]
 }
