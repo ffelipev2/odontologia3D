@@ -23,7 +23,10 @@
       <span class="navbar-title">Visor Anatómico 3D</span>
     </div>
     <div class="navbar-right">
+      <!-- Menú móvil -->
       <button id="menuToggle" class="mobile-menu">☰</button>
+      <!-- Botón visible siempre -->
+      <button id="infoToggle" class="info-btn">ℹ️</button>
       <div class="user-info">
         <span>Laboratorio Virtual</span>
       </div>
@@ -34,7 +37,6 @@
   <aside id="sidebar" class="sidebar">
     <div class="menu">
       <h1>Modelos 3D</h1>
-      <!-- Los botones de modelos se generan dinámicamente -->
       <hr/>
       <button id="btn-reset" class="secondary">Recentrar vista</button>
       <!--<button id="btn-toggle-coords" class="secondary">Ver coordenadas</button>-->
@@ -61,6 +63,7 @@
   <aside id="infoPanel" class="info-panel">
     <div class="info-header">
       <h2 id="modelTitle">Modelo Anatómico</h2>
+      <button id="closeInfo" title="Cerrar">✖</button>
     </div>
     <div class="info-body">
       <p id="modelDescription">Selecciona un modelo para ver su información detallada.</p>

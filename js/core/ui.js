@@ -4,6 +4,9 @@ export async function setupUI({ loadModel, resetCamera, toggleCoords }) {
   const menu = sidebar.querySelector('.menu');
   const menuToggle = document.getElementById('menuToggle');
   const coordsPanel = document.getElementById('coordsPanel');
+  const infoPanel = document.getElementById('infoPanel');
+  const infoToggle = document.getElementById('infoToggle');
+  const closeInfo = document.getElementById('closeInfo');
 
   // === Generar botones desde models.json ===
   const res = await fetch('./js/data/models.json');
@@ -14,7 +17,9 @@ export async function setupUI({ loadModel, resetCamera, toggleCoords }) {
     btn.textContent = model.name;
     btn.addEventListener('click', () => {
       loadModel(model.id);
-      if (window.innerWidth <= 900) sidebar.classList.remove('visible'); // cerrar en móvil
+      // Cerrar panel de info si estaba abierto
+      infoPanel?.classList.remove('visible');
+      if (window.innerWidth <= 900) sidebar.classList.remove('visible'); // cerrar menú móvil
     });
     menu.insertBefore(btn, menu.querySelector('hr'));
   });
@@ -23,13 +28,27 @@ export async function setupUI({ loadModel, resetCamera, toggleCoords }) {
   document.getElementById('btn-reset')?.addEventListener('click', resetCamera);
   document.getElementById('btn-toggle-coords')?.addEventListener('click', toggleCoords);
 
-  // === Menú móvil ===
+  // === Menú lateral móvil ===
   if (menuToggle && sidebar) {
     menuToggle.addEventListener('click', () => {
       sidebar.classList.toggle('visible');
     });
   }
 
-  // === Seguridad: estilos del panel coords ===
+  // === Botón para abrir/cerrar el panel de información ===
+  if (infoToggle && infoPanel) {
+    infoToggle.addEventListener('click', () => {
+      infoPanel.classList.toggle('visible');
+    });
+  }
+
+  // === Botón "✖" dentro del panel de información ===
+  if (closeInfo && infoPanel) {
+    closeInfo.addEventListener('click', () => {
+      infoPanel.classList.remove('visible');
+    });
+  }
+
+  // === Seguridad: ocultar panel de coordenadas al inicio ===
   if (coordsPanel) coordsPanel.style.display = 'none';
 }

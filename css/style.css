@@ -64,6 +64,19 @@ canvas {
   display: none;
 }
 
+/* --- BOTÓN INFO --- */
+.info-btn {
+  background: transparent;
+  color: #fff;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  display: inline-block;
+}
+.info-btn:hover {
+  opacity: 0.8;
+}
+
 /* --- SIDEBAR --- */
 .sidebar {
   position: fixed;

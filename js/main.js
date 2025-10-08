@@ -8,13 +8,11 @@ let scene, camera, controls, renderer;
 let initialCameraPos = new THREE.Vector3();
 let initialTargetPos = new THREE.Vector3();
 
-// === ELEMENTOS DEL LOADER ===
 const overlay = document.getElementById('loadingOverlay');
 const progressBar = document.getElementById('loader-progress');
 const percentText = document.getElementById('loader-percent');
 const titleText = document.getElementById('loader-title');
 
-// --- funciones del overlay ---
 function showLoader(modelName = "modelo 3D") {
   overlay?.classList.remove('hidden');
   if (progressBar) progressBar.style.width = '0%';
@@ -31,11 +29,9 @@ function hideLoader() {
   overlay?.classList.add('hidden');
 }
 
-// --- Inicialización ---
 init();
 
 async function init() {
-  // === Escena y renderizador ===
   const canvas = document.getElementById('c');
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -55,13 +51,18 @@ async function init() {
   controls.dampingFactor = 0.06;
   controls.enablePan = true;
 
-  // === Cargar modelos desde JSON ===
+  // 🔹 Ajuste al redimensionar
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
   const res = await fetch('./js/data/models.json');
   const json = await res.json();
   models = json.models;
 
   setupUI({ loadModel, resetCamera, toggleCoords });
-
   loadModel(models[0].id);
   animate();
 }
@@ -73,15 +74,10 @@ function loadModel(id) {
   showLoader(model.name);
 
   const manager = new THREE.LoadingManager();
-
-  manager.onStart = () => showLoader(model.name);
-  manager.onProgress = (_url, loaded, total) => {
-    const pct = Math.round((loaded / total) * 100);
-    updateLoader(pct);
-  };
+  manager.onProgress = (_url, loaded, total) => updateLoader(Math.round((loaded / total) * 100));
   manager.onLoad = () => {
     hideLoader();
-    saveInitialView(); // guardar vista del modelo actual
+    saveInitialView();
   };
 
   const { objLoader, mtlLoader } = setupLoaders(
@@ -99,7 +95,6 @@ function updateModelInfo(model) {
   document.getElementById('modelDescription').textContent = model.description;
 }
 
-// === Recentrar vista ===
 function saveInitialView() {
   initialCameraPos.copy(camera.position);
   initialTargetPos.copy(controls.target);
@@ -111,7 +106,6 @@ function resetCamera() {
   controls.update();
 }
 
-// === Panel de coordenadas ===
 function toggleCoords() {
   const panel = document.getElementById('coordsPanel');
   if (!panel) return;
