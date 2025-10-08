@@ -80,13 +80,14 @@ function loadModel(id) {
     saveInitialView();
   };
 
-  const { objLoader, mtlLoader } = setupLoaders(
+  // ✅ Corrección: usar todo el objeto loaders
+  const loaders = setupLoaders(
     (_url, loaded, total) => updateLoader(Math.round((loaded / total) * 100)),
     hideLoader,
     manager
   );
 
-  loadModelFromConfig(model, scene, camera, controls, { objLoader, mtlLoader });
+  loadModelFromConfig(model, scene, camera, controls, loaders);
   updateModelInfo(model);
 }
 

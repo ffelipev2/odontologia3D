@@ -15,12 +15,18 @@ export async function setupUI({ loadModel, resetCamera, toggleCoords }) {
   data.models.forEach(model => {
     const btn = document.createElement('button');
     btn.textContent = model.name;
+
     btn.addEventListener('click', () => {
+      const wasVisible = infoPanel?.classList.contains('visible'); // 👈 guarda si el panel estaba abierto
       loadModel(model.id);
-      // Cerrar panel de info si estaba abierto
-      infoPanel?.classList.remove('visible');
-      if (window.innerWidth <= 900) sidebar.classList.remove('visible'); // cerrar menú móvil
+
+      // Si el panel estaba abierto, mantenerlo visible
+      if (wasVisible) infoPanel?.classList.add('visible');
+
+      // Cerrar menú móvil en pantallas pequeñas
+      if (window.innerWidth <= 900) sidebar.classList.remove('visible');
     });
+
     menu.insertBefore(btn, menu.querySelector('hr'));
   });
 
@@ -35,7 +41,7 @@ export async function setupUI({ loadModel, resetCamera, toggleCoords }) {
     });
   }
 
-  // === Botón para abrir/cerrar el panel de información ===
+  // === Botón para abrir/cerrar el panel de información (ℹ️) ===
   if (infoToggle && infoPanel) {
     infoToggle.addEventListener('click', () => {
       infoPanel.classList.toggle('visible');

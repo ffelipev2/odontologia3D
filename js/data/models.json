@@ -33,6 +33,17 @@
             "camera": [21.4, 7.68, 22.76],
             "target": [0, 0, 0],
             "description": "Modelo anatómico del ccuerpo humano humano, empleado para estudios craneofaciales y estructuras óseas del rostro."
+        },
+        {
+            "id": "tooth",
+            "name": "Diente",
+            "path": "./modelos/tooth.stl",
+            "mtl": null,
+            "position": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "camera": [50, 30, 50],
+            "target": [0, 0, 0],
+            "description": "Modelo STL de un diente humano."
         }
     ]
 }
