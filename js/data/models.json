@@ -16,9 +16,9 @@
             "name": "Cráneo",
             "path": "./modelos/Skull.obj",
             "mtl": "./modelos/Skull.mtl",
-            "position": [0, 0.76, -13.81],
+            "position": [3, 0.76, -11.01],
             "rotation": [0, 0, 0],
-            "camera": [1.58, -44.73, 8.13],
+            "camera": [1.56, -57.66, 11.29],
             "target": [1.65, -0.48, -2.64],
             "description": "Modelo anatómico del cráneo humano, empleado para estudios craneofaciales y estructuras óseas del rostro."
         },

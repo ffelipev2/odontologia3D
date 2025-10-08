@@ -8,6 +8,9 @@ let scene, camera, controls, renderer;
 let initialCameraPos = new THREE.Vector3();
 let initialTargetPos = new THREE.Vector3();
 
+// 🔹 Nueva variable global para saber si el modo coordenadas está activo
+let coordsModeActive = false;
+
 const overlay = document.getElementById('loadingOverlay');
 const progressBar = document.getElementById('loader-progress');
 const percentText = document.getElementById('loader-percent');
@@ -51,7 +54,6 @@ async function init() {
   controls.dampingFactor = 0.06;
   controls.enablePan = true;
 
-  // Ajustar render al redimensionar
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -66,7 +68,7 @@ async function init() {
   loadModel(models[0].id);
   animate();
 
-  // 🟩 Controles de teclado para mover/rotar modelo
+  // 🎮 Inicializar controles de teclado
   setupKeyboardControls();
 }
 
@@ -109,11 +111,19 @@ function resetCamera() {
   controls.update();
 }
 
+// === Mostrar / ocultar coordenadas ===
 function toggleCoords() {
   const panel = document.getElementById('coordsPanel');
   if (!panel) return;
+
   const isVisible = panel.style.display === 'block';
   panel.style.display = isVisible ? 'none' : 'block';
+
+  // 🟢 Activar o desactivar modo coordenadas
+  coordsModeActive = !isVisible;
+
+  // feedback visual en consola
+  console.log(`Modo coordenadas: ${coordsModeActive ? 'activo ✅' : 'desactivado ❌'}`);
 }
 
 function updateCoords() {
@@ -150,33 +160,14 @@ document.getElementById('copyCoords')?.addEventListener('click', () => {
     return;
   }
 
-  const formatNum = n => parseFloat(n.toFixed(2)); // formatear con 2 decimales
+  const formatNum = n => parseFloat(n.toFixed(2));
 
-  const pos = [
-    formatNum(obj.position.x),
-    formatNum(obj.position.y),
-    formatNum(obj.position.z)
-  ];
+  const pos = [formatNum(obj.position.x), formatNum(obj.position.y), formatNum(obj.position.z)];
+  const rot = [formatNum(obj.rotation.x), formatNum(obj.rotation.y), formatNum(obj.rotation.z)];
+  const cam = [formatNum(camera.position.x), formatNum(camera.position.y), formatNum(camera.position.z)];
+  const tar = [formatNum(controls.target.x), formatNum(controls.target.y), formatNum(controls.target.z)];
 
-  const rot = [
-    formatNum(obj.rotation.x),
-    formatNum(obj.rotation.y),
-    formatNum(obj.rotation.z)
-  ];
-
-  const cam = [
-    formatNum(camera.position.x),
-    formatNum(camera.position.y),
-    formatNum(camera.position.z)
-  ];
-
-  const tar = [
-    formatNum(controls.target.x),
-    formatNum(controls.target.y),
-    formatNum(controls.target.z)
-  ];
-
-  // 🟦 Formato igual al del models.json
+  // 📋 Formato idéntico al de tu JSON
   const jsonText = 
 `            "position": [${pos.join(', ')}],
             "rotation": [${rot.join(', ')}],
@@ -190,9 +181,10 @@ document.getElementById('copyCoords')?.addEventListener('click', () => {
   console.log('📋 Coordenadas copiadas:\n' + jsonText);
 });
 
-// === Movimiento del modelo con teclado (WASD + R/F + Q/E) ===
+// === Movimiento del modelo con teclado (solo si el panel está activo) ===
 function setupKeyboardControls() {
   window.addEventListener('keydown', e => {
+    if (!coordsModeActive) return; // solo si el panel de coords está visible
     const obj = window.currentObject;
     if (!obj) return;
 
@@ -211,7 +203,6 @@ function setupKeyboardControls() {
       default: return;
     }
 
-    // evitar scroll de la página
     e.preventDefault();
   });
 }
