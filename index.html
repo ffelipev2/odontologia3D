@@ -1,86 +1,90 @@
 <!doctype html>
 <html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Visor Anatómico 3D - Odontología</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-      }
-    }
-  </script>
-</head>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Visor Anatómico 3D - Odontología</title>
+        <link rel="stylesheet" href="css/style.css">
+        <script type="importmap">
+            {
+            "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+            }
+        </script>
+    </head>
 
-<body>
-  <!-- 🧭 NAVBAR -->
-  <nav class="navbar">
-    <div class="navbar-left">
-      <img src="img/logo.png" alt="Logo USS" class="navbar-logo" />
-      <span class="navbar-title">Visor Anatómico 3D</span>
-    </div>
-    <div class="navbar-right">
-      <!-- Menú móvil -->
-      <button id="menuToggle" class="mobile-menu">☰</button>
-      <!-- Botón visible siempre -->
-      <button id="infoToggle" class="info-btn">ℹ️</button>
-      <div class="user-info">
-        <span>Laboratorio Virtual</span>
-      </div>
-    </div>
-  </nav>
+    <body>
+        <!-- 🧭 NAVBAR -->
+        <nav class="navbar">
+            <div class="navbar-left">
+                <img src="img/logo.png" alt="Logo USS" class="navbar-logo" />
+                <span class="navbar-title">Visor Anatómico 3D</span>
+            </div>
+            <div class="navbar-right">
+                <!-- Menú móvil -->
+                <button id="menuToggle" class="mobile-menu">☰</button>
+                <!-- Botón visible siempre -->
+                <button id="infoToggle" class="info-btn">ℹ️</button>
+                <div class="user-info">
+                    <span>Laboratorio Virtual</span>
+                </div>
+            </div>
+        </nav>
 
-  <!-- 🧱 SIDEBAR -->
-  <aside id="sidebar" class="sidebar">
-    <div class="menu">
-      <h1>Modelos 3D</h1>
-      <hr/>
-      <button id="btn-reset" class="secondary">Recentrar vista</button>
-      <!--<button id="btn-toggle-coords" class="secondary">Ver coordenadas</button>-->
-    </div>
-  </aside>
+        <!-- 🧱 SIDEBAR -->
+        <aside id="sidebar" class="sidebar">
+            <div class="menu">
+                <h1>Modelos 3D</h1>
+                <hr/>
+                <button id="btn-reset" class="secondary">Recentrar vista</button>
+                <!--
+                <button id="btn-toggle-coords" class="secondary">Ver coordenadas</button>
+                <br>
+                <button id="copyCoords" class="secondary">📋 Copiar JSON</button>
+                -->
+            </div>
+        </aside>
 
-  <!-- 🎯 CONTENIDO PRINCIPAL -->
-  <main class="main-content">
-    <canvas id="c"></canvas>
-    <div id="credit">Arrastra para rotar · Pincha para zoom · Dos dedos para mover</div>
-  </main>
+        <!-- 🎯 CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+            <canvas id="c"></canvas>
+            <div id="credit">Arrastra para rotar · Pincha para zoom · Dos dedos para mover</div>
+        </main>
 
-  <!-- 📊 PANEL DE COORDENADAS -->
-  <div id="coordsPanel">
-    <b>Objeto</b><br>
-    posX: <span id="posX">0</span> | posY: <span id="posY">0</span> | posZ: <span id="posZ">0</span><br>
-    rotX: <span id="rotX">0</span> | rotY: <span id="rotY">0</span> | rotZ: <span id="rotZ">0</span><br><br>
-    <b>Cámara</b><br>
-    camX: <span id="camX">0</span> | camY: <span id="camY">0</span> | camZ: <span id="camZ">0</span><br>
-    targetX: <span id="tarX">0</span> | targetY: <span id="tarY">0</span> | targetZ: <span id="tarZ">0</span>
-  </div>
+        <!-- 📊 PANEL DE COORDENADAS -->
+        <div id="coordsPanel">
+            <b>Objeto</b><br>
+            posX: <span id="posX">0</span> | posY: <span id="posY">0</span> | posZ: <span id="posZ">0</span><br>
+            rotX: <span id="rotX">0</span> | rotY: <span id="rotY">0</span> | rotZ: <span id="rotZ">0</span><br><br>
+            <b>Cámara</b><br>
+            camX: <span id="camX">0</span> | camY: <span id="camY">0</span> | camZ: <span id="camZ">0</span><br>
+            targetX: <span id="tarX">0</span> | targetY: <span id="tarY">0</span> | targetZ: <span id="tarZ">0</span>
+        </div>
 
-  <!-- 📘 PANEL DE INFORMACIÓN -->
-  <aside id="infoPanel" class="info-panel">
-    <div class="info-header">
-      <h2 id="modelTitle">Modelo Anatómico</h2>
-      <button id="closeInfo" title="Cerrar">✖</button>
-    </div>
-    <div class="info-body">
-      <p id="modelDescription">Selecciona un modelo para ver su información detallada.</p>
-    </div>
-  </aside>
+        <!-- 📘 PANEL DE INFORMACIÓN -->
+        <aside id="infoPanel" class="info-panel">
+            <div class="info-header">
+                <h2 id="modelTitle">Modelo Anatómico</h2>
+                <button id="closeInfo" title="Cerrar">✖</button>
+            </div>
+            <div class="info-body">
+                <p id="modelDescription">Selecciona un modelo para ver su información detallada.</p>
+            </div>
+        </aside>
 
-  <!-- 🌟 LOADING OVERLAY -->
-  <div id="loadingOverlay">
-    <div class="loader-box">
-      <div id="loader-title" class="loader-title">Cargando modelo 3D...</div>
-      <div class="loader-bar">
-        <div id="loader-progress"></div>
-      </div>
-      <div id="loader-percent">0%</div>
-    </div>
-  </div>
+        <!-- 🌟 LOADING OVERLAY -->
+        <div id="loadingOverlay">
+            <div class="loader-box">
+                <div id="loader-title" class="loader-title">Cargando modelo 3D...</div>
+                <div class="loader-bar">
+                    <div id="loader-progress"></div>
+                </div>
+                <div id="loader-percent">0%</div>
+            </div>
+        </div>
 
-  <script type="module" src="js/main.js"></script>
-</body>
+        <script type="module" src="js/main.js"></script>
+    </body>
 </html>

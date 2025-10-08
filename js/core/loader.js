@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
-import { STLLoader } from 'three/addons/loaders/STLLoader.js'; // ✅ NUEVO
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { fadeIn, clearObject } from './utils.js';
 
 // Crea los cargadores con un LoadingManager (para mostrar progreso)
@@ -14,7 +14,7 @@ export function setupLoaders(onProgress, onDone, manager) {
   return {
     objLoader: new OBJLoader(manager),
     mtlLoader: new MTLLoader(manager),
-    stlLoader: new STLLoader(manager) // ✅ NUEVO
+    stlLoader: new STLLoader(manager)
   };
 }
 
@@ -41,7 +41,7 @@ export function loadModelFromConfig(model, scene, camera, controls, loaders) {
     }
   }
 
-  // === STL === ✅
+  // === STL ===
   else if (fileExt === 'stl') {
     loaders.stlLoader.load(model.path, geometry => {
       geometry.computeBoundingBox();
@@ -54,24 +54,22 @@ export function loadModelFromConfig(model, scene, camera, controls, loaders) {
 
       const mesh = new THREE.Mesh(geometry, material);
 
-      // ✅ Centrar y escalar automáticamente
+      // Centrar y escalar automáticamente
       const box = geometry.boundingBox;
       const size = new THREE.Vector3();
       box.getSize(size);
       const maxDim = Math.max(size.x, size.y, size.z);
-      const scale = 10 / maxDim; // ajusta para tamaño razonable
+      const scale = 10 / maxDim;
       mesh.scale.set(scale, scale, scale);
 
-      // Centrar el modelo
+      // Centrar modelo
       const center = new THREE.Vector3();
       box.getCenter(center);
       mesh.position.sub(center);
 
       addToScene(mesh, model, scene, camera, controls);
     });
-  }
-
-  else {
+  } else {
     console.error('Formato de modelo no soportado:', fileExt);
   }
 }

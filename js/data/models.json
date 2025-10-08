@@ -39,10 +39,10 @@
             "name": "Diente",
             "path": "./modelos/tooth.stl",
             "mtl": null,
-            "position": [0, 0, 0],
+            "position": [5.4, 0, 5.4],
             "rotation": [0, 0, 0],
-            "camera": [50, 30, 50],
-            "target": [0, 0, 0],
+            "camera": [4.49, -21.95, 17.04],
+            "target": [6.39, 2.25, 7.29],
             "description": "Modelo STL de un diente humano."
         }
     ]

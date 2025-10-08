@@ -51,7 +51,7 @@ async function init() {
   controls.dampingFactor = 0.06;
   controls.enablePan = true;
 
-  // 🔹 Ajuste al redimensionar
+  // Ajustar render al redimensionar
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -65,6 +65,9 @@ async function init() {
   setupUI({ loadModel, resetCamera, toggleCoords });
   loadModel(models[0].id);
   animate();
+
+  // 🟩 Controles de teclado para mover/rotar modelo
+  setupKeyboardControls();
 }
 
 function loadModel(id) {
@@ -80,7 +83,6 @@ function loadModel(id) {
     saveInitialView();
   };
 
-  // ✅ Corrección: usar todo el objeto loaders
   const loaders = setupLoaders(
     (_url, loaded, total) => updateLoader(Math.round((loaded / total) * 100)),
     hideLoader,
@@ -139,6 +141,80 @@ function updateCoords() {
 }
 
 setInterval(updateCoords, 200);
+
+// === Copiar coordenadas como JSON ===
+document.getElementById('copyCoords')?.addEventListener('click', () => {
+  const obj = window.currentObject;
+  if (!obj) {
+    alert('No hay modelo cargado');
+    return;
+  }
+
+  const formatNum = n => parseFloat(n.toFixed(2)); // formatear con 2 decimales
+
+  const pos = [
+    formatNum(obj.position.x),
+    formatNum(obj.position.y),
+    formatNum(obj.position.z)
+  ];
+
+  const rot = [
+    formatNum(obj.rotation.x),
+    formatNum(obj.rotation.y),
+    formatNum(obj.rotation.z)
+  ];
+
+  const cam = [
+    formatNum(camera.position.x),
+    formatNum(camera.position.y),
+    formatNum(camera.position.z)
+  ];
+
+  const tar = [
+    formatNum(controls.target.x),
+    formatNum(controls.target.y),
+    formatNum(controls.target.z)
+  ];
+
+  // 🟦 Formato igual al del models.json
+  const jsonText = 
+`            "position": [${pos.join(', ')}],
+            "rotation": [${rot.join(', ')}],
+            "camera": [${cam.join(', ')}],
+            "target": [${tar.join(', ')}],`;
+
+  navigator.clipboard.writeText(jsonText)
+    .then(() => alert('Coordenadas copiadas al portapapeles ✅'))
+    .catch(() => alert('No se pudo copiar automáticamente.'));
+
+  console.log('📋 Coordenadas copiadas:\n' + jsonText);
+});
+
+// === Movimiento del modelo con teclado (WASD + R/F + Q/E) ===
+function setupKeyboardControls() {
+  window.addEventListener('keydown', e => {
+    const obj = window.currentObject;
+    if (!obj) return;
+
+    const step = 0.2;     // desplazamiento
+    const rotStep = 0.05; // rotación
+
+    switch (e.key.toLowerCase()) {
+      case 'w': obj.position.z -= step; break; // adelante
+      case 's': obj.position.z += step; break; // atrás
+      case 'a': obj.position.x -= step; break; // izquierda
+      case 'd': obj.position.x += step; break; // derecha
+      case 'r': obj.position.y += step; break; // subir
+      case 'f': obj.position.y -= step; break; // bajar
+      case 'q': obj.rotation.y -= rotStep; break; // rotar izquierda
+      case 'e': obj.rotation.y += rotStep; break; // rotar derecha
+      default: return;
+    }
+
+    // evitar scroll de la página
+    e.preventDefault();
+  });
+}
 
 function animate() {
   requestAnimationFrame(animate);
