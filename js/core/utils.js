@@ -1,3 +1,4 @@
+// Animación de aparición gradual del modelo
 export function fadeIn(obj) {
   obj.traverse(child => {
     if (child.isMesh) {
@@ -15,6 +16,7 @@ export function fadeIn(obj) {
   }, 30);
 }
 
+// Elimina el modelo anterior de la escena
 export function clearObject(scene, obj) {
   if (!obj) return;
   obj.traverse(o => {

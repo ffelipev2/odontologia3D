@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Visor 3D - Universidad San Sebastián</title>
+  <title>Visor Anatómico 3D - Odontología</title>
   <link rel="stylesheet" href="css/style.css">
   <script type="importmap">
     {
@@ -16,7 +16,7 @@
 </head>
 
 <body>
-  <!-- 🧭 NAVBAR SUPERIOR -->
+  <!-- 🧭 NAVBAR -->
   <nav class="navbar">
     <div class="navbar-left">
       <img src="img/logo.png" alt="Logo USS" class="navbar-logo" />
@@ -30,17 +30,14 @@
     </div>
   </nav>
 
-  <!-- 🧱 SIDEBAR IZQUIERDO -->
+  <!-- 🧱 SIDEBAR -->
   <aside id="sidebar" class="sidebar">
     <div class="menu">
       <h1>Modelos 3D</h1>
-      <button id="btn-skull">Cráneo</button>
-      <button id="btn-jaw">Mandíbula</button>
+      <!-- Los botones de modelos se generan dinámicamente -->
       <hr/>
       <button id="btn-reset" class="secondary">Recentrar vista</button>
-      <button id="btn-info" class="secondary">Mostrar información</button>
-      <hr/>
-      <!--<button id="btn-toggle-coords" class="secondary">Ver coordenadas</button> -->
+      <!--<button id="btn-toggle-coords" class="secondary">Ver coordenadas</button>-->
     </div>
   </aside>
 
@@ -49,17 +46,6 @@
     <canvas id="c"></canvas>
     <div id="credit">Arrastra para rotar · Pincha para zoom · Dos dedos para mover</div>
   </main>
-
-  <!-- 📘 PANEL DE INFORMACIÓN DEL MODELO -->
-  <aside id="infoPanel" class="info-panel">
-    <div class="info-header">
-      <h2 id="modelTitle">Modelo Anatómico</h2>
-      <button id="closeInfo" title="Cerrar">✕</button>
-    </div>
-    <div class="info-body">
-      <p id="modelDescription">Selecciona un modelo para ver su información detallada.</p>
-    </div>
-  </aside>
 
   <!-- 📊 PANEL DE COORDENADAS -->
   <div id="coordsPanel">
@@ -71,7 +57,17 @@
     targetX: <span id="tarX">0</span> | targetY: <span id="tarY">0</span> | targetZ: <span id="tarZ">0</span>
   </div>
 
-  <!-- 🌟 NUEVA PANTALLA DE CARGA -->
+  <!-- 📘 PANEL DE INFORMACIÓN -->
+  <aside id="infoPanel" class="info-panel">
+    <div class="info-header">
+      <h2 id="modelTitle">Modelo Anatómico</h2>
+    </div>
+    <div class="info-body">
+      <p id="modelDescription">Selecciona un modelo para ver su información detallada.</p>
+    </div>
+  </aside>
+
+  <!-- 🌟 LOADING OVERLAY -->
   <div id="loadingOverlay">
     <div class="loader-box">
       <div id="loader-title" class="loader-title">Cargando modelo 3D...</div>
