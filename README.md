@@ -18,7 +18,7 @@ Permite explorar, rotar, escalar y analizar modelos 3D educativos directamente d
 ---
 
 ## 🧩 Estructura del proyecto
-
+```
 odontologia3D/
 │
 ├── css/
@@ -50,4 +50,4 @@ odontologia3D/
 ├── index-test.html            ← Versión de calibración (con coordenadas visibles)
 ├── .gitignore                 ← Ignora archivos innecesarios (como backups)
 └── README.md                  ← Descripción del proyecto en GitHub
-
+```
