@@ -3,7 +3,7 @@
         {
             "id": "jaw",
             "name": "Mandíbula 1",
-            "path": "./modelos/Yorik_Jaw.obj",
+            "path": "./modelos/1_mandibula_1/Yorik_Jaw.obj",
             "mtl": null,
             "scale": [1, 1, 1],
             "position": [-5.03, -5.24, -6.83],
@@ -15,8 +15,8 @@
         {
             "id": "jaw2",
             "name": "Mandíbula 2",
-            "path": "./modelos/mandibula2.obj",
-            "mtl": "./modelos/mandibula2.mtl",
+            "path": "./modelos/2_mandibula_2/mandibula2.obj",
+            "mtl": "./modelos/2_mandibula_2/material.mtl",
             "scale": [100, 100, 100],
             "position": [2.17, -5.24, 12.57],
             "rotation": [0, 0.05, 0],
@@ -27,8 +27,8 @@
         {
             "id": "skull",
             "name": "Cráneo",
-            "path": "./modelos/Skull.obj",
-            "mtl": "./modelos/Skull.mtl",
+            "path": "./modelos/3_skull/Skull.obj",
+            "mtl": "./modelos/3_skull/Skull.mtl",
             "scale": [1, 1, 1],
             "position": [3, 0.76, -11.01],
             "rotation": [0, 0, 0],

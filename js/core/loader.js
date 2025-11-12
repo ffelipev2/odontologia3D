@@ -5,7 +5,7 @@ import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { fadeIn, clearObject } from './utils.js';
 
 // ==============================
-// Crea los cargadores con un LoadingManager
+// Configuración de los cargadores
 // ==============================
 export function setupLoaders(onProgress, onDone, manager) {
   if (!manager) {
@@ -21,7 +21,7 @@ export function setupLoaders(onProgress, onDone, manager) {
 }
 
 // ==============================
-// Carga un modelo completo a partir de su configuración
+// Carga un modelo desde su configuración JSON
 // ==============================
 export function loadModelFromConfig(model, scene, camera, controls, loaders) {
   clearObject(scene, window.currentObject);
@@ -35,13 +35,13 @@ export function loadModelFromConfig(model, scene, camera, controls, loaders) {
         materials.preload();
         loaders.objLoader.setMaterials(materials);
         loaders.objLoader.load(model.path, obj => {
-          normalizeOBJScale(obj, model); // 🔹 Escala automática opcional
+          normalizeOBJScale(obj, model);
           addToScene(obj, model, scene, camera, controls);
         });
       });
     } else {
       loaders.objLoader.load(model.path, obj => {
-        normalizeOBJScale(obj, model); // 🔹 Escala automática opcional
+        normalizeOBJScale(obj, model);
         addToScene(obj, model, scene, camera, controls);
       });
     }
@@ -60,15 +60,20 @@ export function loadModelFromConfig(model, scene, camera, controls, loaders) {
 
       const mesh = new THREE.Mesh(geometry, material);
 
-      // Centrar y escalar automáticamente
       const box = geometry.boundingBox;
       const size = new THREE.Vector3();
       box.getSize(size);
       const maxDim = Math.max(size.x, size.y, size.z);
-      const scale = 10 / maxDim;
-      mesh.scale.set(scale, scale, scale);
 
-      // Centrar modelo
+      // ✅ Si no hay escala en el JSON, usa la automática
+      if (model.scale) {
+        mesh.scale.set(...model.scale);
+      } else {
+        const scale = 10 / maxDim;
+        mesh.scale.set(scale, scale, scale);
+      }
+
+      // Centra el modelo
       const center = new THREE.Vector3();
       box.getCenter(center);
       mesh.position.sub(center);
@@ -81,17 +86,16 @@ export function loadModelFromConfig(model, scene, camera, controls, loaders) {
 }
 
 // ==============================
-// Ajuste de escala automática opcional para .OBJ
+// Normaliza la escala de los OBJ si no hay escala definida
 // ==============================
 function normalizeOBJScale(obj, model) {
-  // Si el modelo ya tiene una escala definida en el JSON, no tocar
-  if (model.scale) return;
+  if (model.scale) return; // Si ya tiene escala definida, no tocar
 
   const box = new THREE.Box3().setFromObject(obj);
   const size = new THREE.Vector3();
   box.getSize(size);
   const maxDim = Math.max(size.x, size.y, size.z);
-  const scaleFactor = 10 / maxDim; // 🔸 Ajusta "10" según el tamaño deseado globalmente
+  const scaleFactor = 10 / maxDim; // Ajusta este valor si querés más o menos tamaño base
   obj.scale.set(scaleFactor, scaleFactor, scaleFactor);
 }
 
@@ -109,7 +113,7 @@ function addToScene(obj, model, scene, camera, controls) {
   obj.position.set(...model.position);
   obj.rotation.set(...model.rotation);
 
-  // ✅ Aplica escala personalizada (desde JSON)
+  // ✅ Aplica escala personalizada desde el JSON (si existe)
   if (model.scale) {
     obj.scale.set(...model.scale);
   }
