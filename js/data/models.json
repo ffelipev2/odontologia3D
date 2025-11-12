@@ -18,10 +18,10 @@
             "path": "./modelos/mandibula2.obj",
             "mtl": "./modelos/mandibula2.mtl",
             "scale": [100, 100, 100],
-            "position": [-0.83, -5.24, 42.97],
+            "position": [2.17, -5.24, 12.57],
             "rotation": [0, 0.05, 0],
-            "camera": [151.69, 46.48, 124.31],
-            "target": [0, 0, 0],
+            "camera": [179.56, 58.22, 75.18],
+            "target": [8.6, -23.4, 6.4],
             "description": "Representación tridimensional de la mandíbula humana, utilizada en prácticas de odontología y anatomía facial."
         },
         {
