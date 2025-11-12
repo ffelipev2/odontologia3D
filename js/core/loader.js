@@ -4,7 +4,9 @@ import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { fadeIn, clearObject } from './utils.js';
 
-// Crea los cargadores con un LoadingManager (para mostrar progreso)
+// ==============================
+// Crea los cargadores con un LoadingManager
+// ==============================
 export function setupLoaders(onProgress, onDone, manager) {
   if (!manager) {
     manager = new THREE.LoadingManager();
@@ -18,7 +20,9 @@ export function setupLoaders(onProgress, onDone, manager) {
   };
 }
 
+// ==============================
 // Carga un modelo completo a partir de su configuración
+// ==============================
 export function loadModelFromConfig(model, scene, camera, controls, loaders) {
   clearObject(scene, window.currentObject);
 
@@ -30,14 +34,16 @@ export function loadModelFromConfig(model, scene, camera, controls, loaders) {
       loaders.mtlLoader.load(model.mtl, materials => {
         materials.preload();
         loaders.objLoader.setMaterials(materials);
-        loaders.objLoader.load(model.path, obj =>
-          addToScene(obj, model, scene, camera, controls)
-        );
+        loaders.objLoader.load(model.path, obj => {
+          normalizeOBJScale(obj, model); // 🔹 Escala automática opcional
+          addToScene(obj, model, scene, camera, controls);
+        });
       });
     } else {
-      loaders.objLoader.load(model.path, obj =>
-        addToScene(obj, model, scene, camera, controls)
-      );
+      loaders.objLoader.load(model.path, obj => {
+        normalizeOBJScale(obj, model); // 🔹 Escala automática opcional
+        addToScene(obj, model, scene, camera, controls);
+      });
     }
   }
 
@@ -74,6 +80,24 @@ export function loadModelFromConfig(model, scene, camera, controls, loaders) {
   }
 }
 
+// ==============================
+// Ajuste de escala automática opcional para .OBJ
+// ==============================
+function normalizeOBJScale(obj, model) {
+  // Si el modelo ya tiene una escala definida en el JSON, no tocar
+  if (model.scale) return;
+
+  const box = new THREE.Box3().setFromObject(obj);
+  const size = new THREE.Vector3();
+  box.getSize(size);
+  const maxDim = Math.max(size.x, size.y, size.z);
+  const scaleFactor = 10 / maxDim; // 🔸 Ajusta "10" según el tamaño deseado globalmente
+  obj.scale.set(scaleFactor, scaleFactor, scaleFactor);
+}
+
+// ==============================
+// Agrega el modelo a la escena con posición, rotación, escala y cámara
+// ==============================
 function addToScene(obj, model, scene, camera, controls) {
   obj.traverse?.(n => {
     if (n.isMesh) {
@@ -84,10 +108,17 @@ function addToScene(obj, model, scene, camera, controls) {
 
   obj.position.set(...model.position);
   obj.rotation.set(...model.rotation);
+
+  // ✅ Aplica escala personalizada (desde JSON)
+  if (model.scale) {
+    obj.scale.set(...model.scale);
+  }
+
   scene.add(obj);
   window.currentObject = obj;
   fadeIn(obj);
 
+  // Configura cámara y controles
   camera.position.set(...model.camera);
   controls.target.set(...model.target);
   controls.update();
